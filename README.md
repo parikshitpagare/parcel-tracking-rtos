@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-Parcel Tracking and Monitoring system developed on ESP32 microcontroller using FreeRTOS that can track location, sense vibration and monitor temperature. The system transmits data via GPRS to a web server for displaying real time visual updates on a website.
+Parcel tracking and monitoring system developed on ESP32 microcontroller using FreeRTOS that can track location, sense vibration and monitor temperature. The system transmits data via GPRS to a web server for displaying real time updates on a website.
 </p>
 
 ## Features
