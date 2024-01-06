@@ -10,6 +10,10 @@
    <img src="https://img.shields.io/badge/LICENSE-MIT-green?style=for-the-badge" >
 </p>
 
+<p align="center">
+Parcel Tracking and Monitoring system developed on ESP32 microcontroller using FreeRTOS that can track location, sense vibration and monitor temperature. The system transmits data via GPRS to a web server for displaying real time visual updates on a website.
+</p>
+
 ## Features
 
 - Location Tracking using Quectel L89H GNSS module
