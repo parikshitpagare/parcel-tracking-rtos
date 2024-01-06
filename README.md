@@ -6,3 +6,12 @@
    <img src="https://img.shields.io/badge/MYSQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"">
    <img src="https://img.shields.io/badge/LICENSE-MIT-green?style=for-the-badge" >
 </p>
+
+## Features
+
+- Location Tracking using Quectel L89H GNSS module
+- Temperature sensing using DHT11 sensor
+- Vibration intensity sensing using ADXL335 accelerometer
+- Activity monitoring on OLED display
+- Dedicated Website for real time visual updates
+- Wireless data transfer to Web Server using SIM800L GSM module
