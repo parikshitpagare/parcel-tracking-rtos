@@ -1,3 +1,6 @@
+
+![Banner](https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/b583883e-9307-42d7-95ae-83d136bc14aa)
+
 <p align="center">
    <img src="https://img.shields.io/badge/ESPRESSIF-ESP32-E7352C?style=for-the-badge&logo=espressif&logoColor=white" >
    <img src="https://img.shields.io/badge/FreeRTOS-4bbb4f?style=for-the-badge">
