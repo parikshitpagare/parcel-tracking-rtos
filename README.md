@@ -49,6 +49,10 @@ The Embedded system is based on a 32-bit high performance microcontroller which 
 brain of the system. For performing all the tasks simultaneously, Real Time Operating System (RTOS)
 is running on top of the bare metal microcontroller. The tasks are implemented as follows,
 
+<p align="center">
+	<img src="https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/230a8215-18b8-4757-a96c-3a3f6fe07222" width="75%" height="75%">
+</p>
+
 - For temperature monitoring a digital temperature sensor is integrated with one of the GPIO pins of the microcontroller.
 
 - For sensing vibration a 3-axis accelerometer is integrated with ADC pins of the microcontroller which can compute the intensity of vibration in X, Y and Z axis.
@@ -73,6 +77,9 @@ the web server.
 
 - The client-side processing involves displaying the data on the website page which is accessible to the user.
 
+  <p align="center">
+	<img src="https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/e6aaf996-78f5-4700-8ff2-18d352d89711" width="75%" height="75%">
+</p>
 
 # Embedded System Requirements
 
