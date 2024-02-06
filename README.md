@@ -14,7 +14,18 @@
 Parcel tracking and monitoring system developed on ESP32 microcontroller using FreeRTOS that can track location, sense vibration and monitor temperature. The system transmits data via GPRS to a web server for displaying real time updates on a website.
 </p>
 
-## Features
+# About
+
+- A system is developed that can be used by a logistic company to track the exact location during transport of sensitive goods and also monitor the environment on a continuous basis in real time.
+  
+- For monitoring the environment and visualizing the data collected from all the sensors, a website is developed and deployed on a server. 
+  
+- The web server receives the data periodically from the GSM module and the data is displayed on the website.
+
+- A dynamic website is implemented where a user can view updated data without the need to refresh the page. The user can see real time graphical updates as well as the previous data received
+for better understanding of the conditions.
+
+# Features
 
 - Location Tracking using Quectel L89H GNSS module
 - Temperature sensing using DHT11 sensor
@@ -22,3 +33,114 @@ Parcel tracking and monitoring system developed on ESP32 microcontroller using F
 - Activity monitoring on OLED display
 - Dedicated Website for real time visual updates
 - Wireless data transfer to Web Server using SIM800L GSM module
+
+# Proposed System and Overview
+
+The project implementation requires a combination of hardware and software which is developed separately.
+
+The implementation is divided in two categories,
+
+- Embedded System
+- Web Development
+
+## Embedded System
+
+The Embedded system is based on a 32-bit high performance microcontroller which is the
+brain of the system. For performing all the tasks simultaneously, Real Time Operating System (RTOS)
+is running on top of the bare metal microcontroller. The tasks are implemented as follows,
+
+- For temperature monitoring a digital temperature sensor is integrated with one of the GPIO pins of the microcontroller.
+
+- For sensing vibration a 3-axis accelerometer is integrated with ADC pins of the microcontroller which can compute the intensity of vibration in X, Y and Z axis.
+
+- To get an exact location, a GNSS module is used which can acquire and track multiple satellite systems like GPS, IRNSS, GLONASS, BeiDou, Galileo and QZSS. The integration with microcontroller is done using UART communication protocol.
+
+- To transmit the data collected from above sensors to a web server, a GSM module is integrated using the UART communication protocol. The data is sent to the web server wirelessly via GPRS.
+
+- To get visual updates, a small OLED display is integrated with the microcontroller using I2C communication protocol.
+
+- A RGB led is also used to indicate the status of the system.
+
+
+## Web Development
+
+### Web Server Overview
+
+For transferring the data to the web server, HTTP protocol is implemented which is based on the request-response model of communication. All the data is sent from GSM module via a URL to
+the web server.
+
+- All the operations for parsing and storing the data is done at back-end which is popularly known as server-side processing.
+
+- The client-side processing involves displaying the data on the website page which is accessible to the user.
+
+
+# Embedded System Requirements
+
+## Hardware
+
+- ESP32 Microcontroller
+- DHT11 Temperature sensor
+- ADXL335 Accelerometer
+- Quectel L89H GNSS module
+- SIM800L V2.0 GSM module
+- OLED display
+- RGB Led
+
+## Schematic
+
+
+
+## Software
+
+To program the microcontroller **Arduino IDE** is used which is compatible with ESP32. 
+
+### How to connect ESP32 with Arduino IDE?
+
+- Download and install the Arduino IDE
+- Install the ESP32 Library at `File -> Preference -> Additional Boards Manager URLs:` https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+- Then in the `Tools -> Board Manager` -> search for ESP32 and install
+
+### Libraries 
+
+Certain libraries are required for proper functioning of the microcontroller and interfaced components.
+
+<table>
+  <tr>
+    <th>Components/Modules</th>
+    <th>Library</th>
+  </tr>
+  <tr>
+    <td>DHT 11</td>
+    <td>Adafruit Unified Sensor, Adafruit DHT Sensor</td>
+  </tr>
+  <tr>
+    <td>L89H GNSS</td>
+    <td>TinyGPSPlus</td>
+  </tr>
+  <tr>
+    <td>OLED Display</td>
+    <td>Adafruit SSD1306, Adafruit BusIO, Adafruit GFX </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <th>Protocol</th>
+    <th>Library</th>
+  </tr>
+  <tr>
+    <td>UART</td>
+    <td>Hardware Serial (Part of Arduino IDE)</td>
+  </tr>
+  <tr>
+    <td>I2C</td>
+    <td>Wire (Part of Arduino IDE)</td>
+  </tr>
+</table>
+
+## Power
+
+- Each sensor/module have different power requirements which need to be considered in the design. Most of the breakout boards used in the project have a voltage regulator which enables use of common voltage of 5V available on the microcontroller development board itself.
+
+- But there is a limitation of current that can be drawn from the microcontroller. To tackle this problem, two **18650 Li-Ion batteries** coupled with a **AP62301 5V 2A buck converter** is implemented.
+
