@@ -297,7 +297,7 @@ Detailed step by step instructions are provided by Digital Ocean
 ### Working of LAMP Stack on server
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/cd99a79f-b177-4c20-a9b1-0cae6c507a74" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/cd99a79f-b177-4c20-a9b1-0cae6c507a74" width="65%" height="65%">
 </p>
 
 ## Implementation of MySQL using PHP and phpMyAdmin
@@ -314,7 +314,7 @@ To interact with the database an extension of the MySQL API called **MySQLi (MyS
 The structure can been seen as follows,
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/4fb9dfe5-fb91-4443-bb17-0186dba6c30f" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/4fb9dfe5-fb91-4443-bb17-0186dba6c30f" width="80%" height="80%">
 </p>
 
 ### Connecting to MySQL Database
@@ -357,7 +357,7 @@ To tackle this issue, two ways are implemented on the client side using JavaScri
 - The Rx and Tx pins of L89H GNSS module are connected to Tx and Rx pins of ESP32 microcontroller respectively as shown in figure.
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/8a158d70-aa46-4af7-8828-0df1be5a0969" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/8a158d70-aa46-4af7-8828-0df1be5a0969" width="60%" height="60%">
 </p>
 
 ## DHT11 Temperature Sensor
@@ -365,7 +365,7 @@ To tackle this issue, two ways are implemented on the client side using JavaScri
 - DHT11 is a simple digital temperature sensor which is easily integrated by connecting the OUT pin to the GPIO Pin 32 as seen in the figure.
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/8642691e-21ec-4064-aa19-0049c9527d0f" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/8642691e-21ec-4064-aa19-0049c9527d0f" width="60%" height="60%">
 </p>
 
 - In the application, a threshold of **32°C** is set which means anything below the threshold is considered **Ambient Temperature** and above is considered as **Critical Temperature**.
@@ -380,7 +380,7 @@ As required in the system, vibration is required to be computed continuously whi
 - For conversion, it makes use of the 3 of the 16 on-board ADC channels of ESP32 which has a resolution of 12-bit that returns values between 0 to 4095.
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/316ffcfe-6a2e-42cd-be5f-e469a4b31080" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/316ffcfe-6a2e-42cd-be5f-e469a4b31080" width="60%" height="60%">
 </p>
 
 The process implemented for computing vibration is as follows,
@@ -407,7 +407,7 @@ The Rx and Tx pins of SIM800L module are connected to Tx and Rx pins of ESP32
 microcontroller respectively.
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/e9f8d6c9-c041-433b-bd38-9335cff51c5d" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/e9f8d6c9-c041-433b-bd38-9335cff51c5d" width="60%" height="60%">
 </p>
 
 ###  Using HTTP Protocol for Sending Data to Web Server
@@ -540,7 +540,7 @@ sendATcommand("AT+HTTPACTION=0", "0,200", 2000);
 For displaying all the data received from the sensors and modules on the embedded platform itself, an OLED display is integrated with ESP32 using Inter-Integrated Circuit (I2C) communication protocol.
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/b521e2e1-322b-45d8-a75c-b14c988bdb1c" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/b521e2e1-322b-45d8-a75c-b14c988bdb1c" width="60%" height="60%">
 </p>
 
 I2C operates in 2 modes – Master mode and Slave Mode. In this application, ESP32 acts as the master and OLED display is the slave. As seen from figure, the slave (OLED display) and master (ESP32) are connected using SDA and SCL lines where,
@@ -549,7 +549,7 @@ I2C operates in 2 modes – Master mode and Slave Mode. In this application, ESP
 - SCL (Serial Clock) : Carries the clock signal based on which data transfer takes place.
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/49bc3d4c-2556-4b56-af48-b19c38b79484" width="85%" height="85%">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/49bc3d4c-2556-4b56-af48-b19c38b79484" width="75%" height="75%">
 </p>
 
 As we need to display multiple data including location co-ordinates, temperature and vibration intensity, it is impossible to display everything all at once on a tiny 0.96” display. 
