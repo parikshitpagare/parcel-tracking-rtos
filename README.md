@@ -17,7 +17,7 @@ Parcel tracking and monitoring system developed on ESP32 microcontroller using F
 <br>
 
 <p align="center">
-	<img src="https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/718607ee-b5a7-421d-882e-1f088420d793" width="80%" height="80%">
+	<img src="https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/718607ee-b5a7-421d-882e-1f088420d793" width="90%" height="90%">
 </p>
 
 <br>
