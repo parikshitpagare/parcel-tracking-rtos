@@ -88,7 +88,9 @@ the web server.
 
 ## Schematic
 
-
+<p align="center">
+	<img src="schematic_parcel_tracking_rtos.png" width="80%" height="80%">
+</p>
 
 ## Software
 
@@ -144,3 +146,82 @@ Certain libraries are required for proper functioning of the microcontroller and
 
 - But there is a limitation of current that can be drawn from the microcontroller. To tackle this problem, two **18650 Li-Ion batteries** coupled with a **AP62301 5V 2A buck converter** is implemented.
 
+# Web Development Requirements
+
+## Hardware
+
+For the website to be online and available, it is required to be hosted on a server. There are two options that can be implemented.
+
+- Shared Hosting (GoDaddy, Hostinger, etc.).
+- Virtual Private Server (VPS) which is provided as ‘Infrastructure as a Service (IaaS)’ by many vendors (Digital Ocean, Linode, etc.).
+
+The website for this project is deployed on a VPS provided by Digital Ocean.
+
+## Web Application Stack
+
+The VPS is a bare-metal server with an operating system installed on top of it. For deploying the website following packages are installed,
+
+<table>
+  <tr>
+    <th>Package</th>
+    <th>Use</th>
+  </tr>
+  <tr>
+    <td>Ubuntu 22.04 (LTS) x64</td>
+    <td>Operating system</td>
+  </tr>
+  <tr>
+    <td>Apache2</td>
+    <td>Web server</td>
+  </tr>
+  <tr>
+    <td>PHP</td>
+    <td>Server-side scripting engine</td>
+  </tr>
+  <tr>
+    <td>MySQL</td>
+    <td>RDBMS to store all the incoming data</td>
+  </tr>
+  <tr>
+    <td>phpMyAdmin</td>
+    <td>GUI to handle the administration of MySQL over the web</td>
+  </tr>
+</table>
+
+This stack is commonly known as the LAMP Stack where,
+
+ - L : Linux
+ - A : Apache
+ - M : MySQL
+ - P : PHP
+
+## Dependencies
+
+For developing the front-end and back-end of the website, few frameworks and API’s are made use of. Instead of installing a package manager to use the frameworks, the CDN’s of these frameworks are included, which are placed in the header tag of the HTML document.
+
+<table>
+  <tr>
+    <th>Dependencies</th>
+    <th>Use</th>
+  </tr>
+  <tr>
+    <td>Bootstrap</td>
+    <td>Front-end toolkit for front-end development</td>
+  </tr>
+  <tr>
+    <td>jQuery</td>
+    <td>JavaScript Library for simpler Javascript coding</td>
+  </tr>
+  <tr>
+    <td>Chart.js</td>
+    <td>JavaScript charting library for creating graphs and charts</td>
+  </tr>
+  <tr>
+    <td>Datatables</td>
+    <td>Plug-in for the jQuery Javascript library to build advanced tables</td>
+  </tr>
+  <tr>
+    <td>Leaflet</td>
+    <td>JavaScript library for mobile-friendly interactive maps</td>
+  </tr>
+</table>
