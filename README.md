@@ -14,6 +14,14 @@
 Parcel tracking and monitoring system developed on ESP32 microcontroller using FreeRTOS that can track location, sense vibration and monitor temperature. The system transmits data via GPRS to a web server for displaying real time updates on a website.
 </p>
 
+<br>
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/718607ee-b5a7-421d-882e-1f088420d793" width="80%" height="80%">
+</p>
+
+<br>
+
 # About
 
 - A system is developed that can be used by a logistic company to track the exact location during transport of sensitive goods and also monitor the environment on a continuous basis in real time.
