@@ -235,7 +235,7 @@ For developing the front-end and back-end of the website, few frameworks and API
   </tr>
 </table>
 
-# Implementation & Working
+# Implementation
 
 ## RTOS Implementation
 
@@ -270,9 +270,90 @@ A queue in RTOS is a kernel object that is capable of passing information betwee
 
 A queue has following API’s in FreeRTOS which are implemented in the application,
 
- - `xQueueCreate()` : Create a queue.
- - `xQueueSend()` : Send data through the queue.
- - `xQueueRecieve()` : Receive data from the queue.
+- `xQueueCreate()` : Create a queue.
+- `xQueueSend()` : Send data through the queue.
+- `xQueueRecieve()` : Receive data from the queue.
+
+## Server Implementation
+
+The website for this project is deployed on a Virtual Private Server(VPS) provided by the vendor Digital Ocean.
+
+After signing up for a VPS, Digital ocean provides a virtual machine with an IP address which is used to deploy the website and make it accessible to everyone. Digital Ocean calls one of these machines as **‘droplet’**.
+
+The VPS used for the project has following specification,
+
+- Operating System : Ubuntu 22.04 (LTS) x64
+- CPU Cores : 1
+- RAM : 1GB
+- Disk Space : 25 GB
+
+### Installing the LAMP Stack on the Server using Terminal
+
+Detailed step by step instructions are provided by Digital Ocean
+
+- Installing LAMP on Ubuntu 22.04 - [Digital Ocean]( https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-22-04)
+
+- Installing phpMyAdmin on Ubuntu 22.04 - [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04)
+
+### Working of LAMP Stack on server
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/cd99a79f-b177-4c20-a9b1-0cae6c507a74" width="85%" height="85%">
+</p>
+
+## Implementation of MySQL using PHP and phpMyAdmin
+
+When a successful request is made to the web server by the GSM module, the incoming data is stored in the MySQL database. 
+
+To interact with the database an extension of the MySQL API called **MySQLi (MySQL Improved)** is used in the code, which is part of the PHP package.
+
+### Database Structure
+
+- Using the phpMyAdmin interface, a new database is created named ‘tracking-system’. 
+- Inside the database, 3 tables are created each for location, temperature and vibration named **‘tbl_gps’**,**‘tbl_temp’**, **‘tbl_vib’** respectively.
+
+The structure can been seen as follows,
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/4fb9dfe5-fb91-4443-bb17-0186dba6c30f" width="85%" height="85%">
+</p>
+
+### Connecting to MySQL Database
+
+While installing the MySQL package, a password is set in the terminal to secure the database.
+
+So now, for connecting to the database we need to enter the `servername`, `username`, `password` and `database` name.
+
+The connection to the database is made using the API `mysqli_connect()` which accepts the above 4 parameters,
+
+```php
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "***********";
+$database = "tracking-system";
+
+/* Connecting to the database */
+$conn = mysqli_connect($servername, $username, $password, $database);
+?>
+```
+
+##  Implementation of Dynamic Website on Client-Side
+
+The data is updated dynamically in the database using PHP and MySQL. All the back-end process is done on the server which is called server-side processing.
+
+The issue with the front-end is that all the updated data cannot be viewed by the user on the website without continuously reloading the entire page which is not a user-friendly approach. 
+
+To tackle this issue, two ways are implemented on the client side using JavaScript which can update all the data on the website without any need for refreshing the page.
+
+- AJAX
+- Fetch API
+
+# Working 
 
 ## Location Tracking
+
+### Integration of Quectel L89H GNSS Module
+
+The Quectel L89H Global Navigation Satellite System (GNSS) module makes use of Universal Asynchronous Receiver-Transmitter (UART) communication protocol.
 
