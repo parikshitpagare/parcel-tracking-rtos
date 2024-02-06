@@ -132,6 +132,8 @@ Certain libraries are required for proper functioning of the microcontroller and
   </tr>
 </table>
 
+<br>
+
 <table>
   <tr>
     <th>Protocol</th>
@@ -232,3 +234,45 @@ For developing the front-end and back-end of the website, few frameworks and API
     <td>JavaScript library for mobile-friendly interactive maps</td>
   </tr>
 </table>
+
+# Implementation & Working
+
+## RTOS Implementation
+
+The Real Time Operating System (RTOS) used in this project is called FreeRTOS which is a class of RTOS that is designed to be small enough to run on a microcontroller.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/cfe3aa7c-00a0-42d4-9bd6-ae1c280785a0" width="85%" height="85%">
+</p>
+
+### Scheduler
+
+- In the application developed for this project, all tasks are given same priorities giving each task equal importance. 
+
+- Some tasks like temperature monitoring and acquiring location are given a
+delay of 5000ms as there is no need for them to be executed every 1ms.
+
+Creating a task delay in FreeRTOS using the API `vTaskDelay()`,
+
+`vTaskDelay(5000 / portTICK_PERIOD_MS);`
+
+### Tasks
+
+Tasks are small pieces of code that run independently based on the scheduling algorithm implemented in the RTOS. In FreeRTOS a task is created using the API `xTaskCreatePinnedToCore()`
+
+### Queues and Data Passing
+
+A queue in RTOS is a kernel object that is capable of passing information between tasks without incurring overwrites from other tasks or entering into a race condition. 
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/parcel-tracking-rtos/assets/80714882/f8d0b57e-77bc-4612-9df0-1ac16fb687c8" width="85%" height="85%">
+</p>
+
+A queue has following API’s in FreeRTOS which are implemented in the application,
+
+ - `xQueueCreate()` : Create a queue.
+ - `xQueueSend()` : Send data through the queue.
+ - `xQueueRecieve()` : Receive data from the queue.
+
+## Location Tracking
+
