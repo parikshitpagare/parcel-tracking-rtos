@@ -235,7 +235,7 @@ For developing the front-end and back-end of the website, few frameworks and API
   </tr>
 </table>
 
-# Implementation
+# Design and Implementation
 
 ## RTOS Implementation
 
@@ -292,7 +292,6 @@ The VPS used for the project has following specification,
 Detailed step by step instructions are provided by Digital Ocean
 
 - Installing LAMP on Ubuntu 22.04 - [Digital Ocean]( https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-22-04)
-
 - Installing phpMyAdmin on Ubuntu 22.04 - [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-22-04)
 
 ### Working of LAMP Stack on server
@@ -349,11 +348,284 @@ To tackle this issue, two ways are implemented on the client side using JavaScri
 - AJAX
 - Fetch API
 
-# Working 
+# Integration & Working of Sensors
 
-## Location Tracking
+## Quectel L89H GNSS Module
 
-### Integration of Quectel L89H GNSS Module
+- The Quectel L89H Global Navigation Satellite System (GNSS) module makes use of Universal Asynchronous Receiver-Transmitter (UART) communication protocol.
+  
+- The Rx and Tx pins of L89H GNSS module are connected to Tx and Rx pins of ESP32 microcontroller respectively as shown in figure.
 
-The Quectel L89H Global Navigation Satellite System (GNSS) module makes use of Universal Asynchronous Receiver-Transmitter (UART) communication protocol.
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/8a158d70-aa46-4af7-8828-0df1be5a0969" width="85%" height="85%">
+</p>
 
+## DHT11 Temperature Sensor
+
+- DHT11 is a simple digital temperature sensor which is easily integrated by connecting the OUT pin to the GPIO Pin 32 as seen in the figure.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/8642691e-21ec-4064-aa19-0049c9527d0f" width="85%" height="85%">
+</p>
+
+- In the application, a threshold of **32°C** is set which means anything below the threshold is considered **Ambient Temperature** and above is considered as **Critical Temperature**.
+
+- On the embedded system platform the status is indicated with the help of an RGB LED which emits green color for Ambient Temperature and red color for Critical Temperature.
+
+## ADXL335 Accelerometer
+
+As required in the system, vibration is required to be computed continuously which can be best done by an accelerometer. For this ADXL335 is integrated by using 3 ADC pins of ESP32 (ADC0, ADC3 and ADC6) as seen in figure.
+
+- The values from the accelerometer are in analog form which is required to be converted to a digital signal. 
+- For conversion, it makes use of the 3 of the 16 on-board ADC channels of ESP32 which has a resolution of 12-bit that returns values between 0 to 4095.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/316ffcfe-6a2e-42cd-be5f-e469a4b31080" width="85%" height="85%">
+</p>
+
+The process implemented for computing vibration is as follows,
+
+1. Reading the analog pins of the microcontroller that are connected to the X, Y and Z axis of the accelerometer and converting the analog signal to digital internally.
+
+2. Taking 50 samples every 1ms to get an average value for more accurate results and minimize noise to a minimum.
+
+3. Comparing the change in current and previous values by taking difference (Current Value – Previous Value).
+
+4. Storing the Current Value = Last Value before going back to Step 1 for getting new values.
+   
+The process goes from Step 1 to Step 4 continuously and any change is noted. Increase in difference value indicates increase in vibration and vice-versa.
+
+In the application, a threshold of **|30|** is set which means difference in the range of -30 and 30 is considered **Low Vibration** and outside the range is considered as **High Vibration**.
+
+On the embedded system platform the status is indicated with the help of an RGB LED which emits green color for Low Vibration and red color for High Vibration.
+
+## SIM800L GSM Module
+
+Similar to the GNSS module, the GSM module makes use of Universal Asynchronous Receiver-Transmitter (UART) communication protocol.
+
+The Rx and Tx pins of SIM800L module are connected to Tx and Rx pins of ESP32
+microcontroller respectively.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/e9f8d6c9-c041-433b-bd38-9335cff51c5d" width="85%" height="85%">
+</p>
+
+###  Using HTTP Protocol for Sending Data to Web Server
+
+There are basically two common HTTP Request methods that can be used to send data to the web server,
+
+**GET Request:**
+
+Using GET we can transmit the data to the server via the URL by the setting the parameters in URL itself. We send a query string using name/value pairs in the URL.
+
+`/folder_name/page_name.php?name1=value1&name2=value2&.....`
+
+**POST Request:**
+
+POST does not send anything in the URL. Data sent to the server is stored in the request body of the HTTP request.
+
+```php
+POST /folder_name/page_name.php HTTP/1.1
+Host: website_url.com
+
+name1=value1&name2=value2&.....
+```
+
+In the application, GET method is used for data transmission and the exact URL is as follows,
+
+```php
+http://website-url/backend-php/db-sensors.php?lat=latValue&lon=lonValue&temp=tempValue&x=xValue&y=yValue&z=zValue
+```
+
+When request is received by the web server it sends a response which is called HTTP Response. 
+
+If the response status code is 200 then the request was accepted successfully. If the response status is 401, 404, 601, etc. then it indicates some kind of error. There are different status codes for different issues or errors.
+
+### Using AT Commands
+
+AT Commands are mainly used to configure and debug modems as well as to enable network connection to a carrier in GSM, GPRS, and mobile phone modems.
+
+For sending data from the SIM800L GSM module via GPRS using HTTP GET method we require multiple AT commands.
+
+<table>
+  <tr>
+    <th>AT Command</th>
+    <th>Use</th>
+  </tr>
+  <tr>
+    <td>AT+CFUN=1</td>
+    <td>Sets the level of functionality. 1=Full functionality where highest level of power is drawn</td>
+  </tr>
+  <tr>
+    <td>AT+CGATT=1</td>
+    <td>Used to attach or detach the module SIM800L to packet domain service</td>
+  </tr>
+  <tr>
+    <td>AT+SAPBR=3,1,\"Contype\",\"GPRS\"</td>
+    <td>Sets the GPRS connection parameter in the SIM800L</td>
+  </tr>
+  <tr>
+    <td>AT+SAPBR=3,1,\"APN\",\"CMNET\"</td>
+    <td>Writes the APN parameter to the SIM800L. The APN (Access Point Name) is the access point in the mobile network. The module used has the apn name ‘CMNET’.</td>
+  </tr>
+  <tr>
+    <td>AT+SAPBR=1,1</td>
+    <td>Opens the carrier with the previously defined parameters. This can be seen as the start command for GPRS.</td>
+  </tr>
+  <tr>
+    <td>AT+HTTPINIT</td>
+    <td>Initializes the HTTP service. The SIM800L will be informed that an HTTP request starts.</td>
+  </tr>
+  <tr>
+    <td>AT+HTTPPARA=\"CID\",1</td>
+    <td>Defines the carrier profile. Usually this is always 1.</td>
+  </tr>
+  <tr>
+    <td>AT+HTTPPARA=\"URL\",\url_name"</td>
+    <td>This command passes the URL to be called along with the data to be sent. It is the same format as it is entered in a web browser.</td>
+  </tr>
+    <tr>
+    <td>AT+HTTPACTION=0</td>
+    <td>With HTTPACTION the request method is defined. The following applies - 0 = GET, 1 = POST, 2 = HEAD. The response includes the status code from the server and the data length.</td>
+  </tr>
+</table>
+
+### Sending Data to the Web Server
+
+Setting up the module for data transfer using AT commands described in Table,
+
+```cpp
+sendATcommand("AT+CFUN=1", "OK", 2000);
+sendATcommand("AT+CGATT=1", "OK", 2000);
+sendATcommand("AT+SAPBR=3,1,\"Contype\",\"GPRS\"", "OK", 2000);
+sendATcommand("AT+SAPBR=3,1,\"APN\",\"CMNET\"", "OK", 2000);
+sendATcommand("AT+SAPBR=1,1", "OK", 2000);
+sendATcommand("AT+HTTPINIT", "OK", 2000);
+sendATcommand("AT+HTTPPARA=\"CID\",1", "OK", 1000);
+```
+
+Setting the URL and the parameters to be sent,
+
+```cpp
+url = "http://website-url/backend-php/db-sensors.php?lat=";
+ // Latitude
+url += lat;
+url += "&lon=";
+ // Longitude
+url += lon;
+url += "&temp=";
+ // Temperature
+url += temp;
+url += "&x=";
+ // Accelerometer X-Axis
+url += vibX;
+url += "&y=";
+ // Accelerometer Y-Axis
+url += vibY;
+url += "&z=";
+ // Accelerometer Z-Axis
+url += vibZ;
+```
+Sending the entire URL to the web server using HTTPACTION=0 which is the AT command for HTTP GET method,
+
+```cpp
+GSM.print("AT+HTTPPARA=\"URL\",\"");
+GSM.print(url);
+sendATcommand("\"", "OK", 2000);
+sendATcommand("AT+HTTPACTION=0", "0,200", 2000);
+```
+
+## OLED display
+
+For displaying all the data received from the sensors and modules on the embedded platform itself, an OLED display is integrated with ESP32 using Inter-Integrated Circuit (I2C) communication protocol.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/b521e2e1-322b-45d8-a75c-b14c988bdb1c" width="85%" height="85%">
+</p>
+
+I2C operates in 2 modes – Master mode and Slave Mode. In this application, ESP32 acts as the master and OLED display is the slave. As seen from figure, the slave (OLED display) and master (ESP32) are connected using SDA and SCL lines where,
+
+- SDA (Serial Data) : Used to transfer the data from ESP32 to OLED display.
+- SCL (Serial Clock) : Carries the clock signal based on which data transfer takes place.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/49bc3d4c-2556-4b56-af48-b19c38b79484" width="85%" height="85%">
+</p>
+
+As we need to display multiple data including location co-ordinates, temperature and vibration intensity, it is impossible to display everything all at once on a tiny 0.96” display. 
+
+To mitigate this problem, a tactile button is integrated which allows us to toggle between different data like pages in a book.
+
+- The OUT pin of the button is interfaced with one of the GPIO pins of ESP32 as seen in the figure. 
+  
+- There is a PULL-UP resistor already implemented with the GPIO pin in ESP32 which is made use of in the code to avoid debouncing and noise, providing a clean transition at its output.
+
+# Website 
+
+The website is divided into 3 sections,
+
+- Section 1: Activity Monitoring
+- Section 2- Real Time Updates
+- Section 3 - Previous Data
+
+## Section 1: Activity Monitoring
+
+This section of the website focuses on displaying the **overview of the system**. It is divided in 3 cards using HTML/CSS and each card has following data,
+
+- **Location Card**: Displays the latitude and longitude co-ordinates along with the timestamp at which the data was received.
+
+- **Temperature Card**: Displays the temperature status (Ambient or Critical) along with the timestamp at which the data was received.
+
+- **Vibration Card**: Displays the vibration status (High or Low) along with the timestamp at which the data was received.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/17fb9e57-f811-498c-9bae-71e9acea416c" width="90%" height="90%">
+</p>
+
+## Section 2: Real Time Updates
+
+This section of the website focuses on displaying data in real-time. The temperature and vibration data are plotted on a graph and the current location is indicated on a map which updates with a fixed time interval.
+
+### Graphical Updates
+
+- To plot graphs with the temperature and vibration data fetched from the database, a charting library based on JavaScript called **Chart.js** is used.
+
+- It is a popular visualization library for JavaScript, and comes with a wide variety of built-in chart types like line chart, bar chart, pie chart, etc. 
+
+- The chart type used in this application is a **Line Chart**.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/3fcf1d2c-6bb4-4a42-8774-141dbd1bdee7" width="90%" height="90%">
+</p>
+
+### Location Updates on Map
+
+The latitude and longitude co-ordinates are already displayed in the Activity Monitory section of the website, but it does not display the exact location of the co-ordinates which is not user-friendly.
+
+So, a map is included to pinpoint to the exact location of the co-ordinates with the help of Leaflet, an open-source JavaScript library for mobile-friendly interactive maps.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/f10ad6f6-a71c-4166-9b97-6b29f949ddaf" width="90%" height="90%">
+</p>
+
+## Section 3: Previous Data
+
+This section of the website focuses on displaying all the **previous data** that is received and stored in the database. 
+
+Since the application is about understanding the environment in which the package is being transported, it is crucial for the user to know and understand the conditions for the
+entire journey. 
+
+The user cannot access the internal MySQL database, so a front-end feature is
+developed to display all the data stored in the database in the form of advanced tables using a plug-in for the jQuery JavaScript library called **DataTables**.
+
+<p align="center">
+	<img src="https://github.com/parikshitpagare/smart-home-automation-rtos/assets/80714882/6d787750-e139-41ac-8b8f-9b214742b9db" width="90%" height="90%">
+</p>
+
+## Creator
+
+**Parikshit Pagare**
+
+<a href="https://linkedin.com/in/parikshitpagare"><img src="https://img.shields.io/badge/Linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white.svg"/></a>
+<a href="https://youtube.com/@parikshitpagare"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=YouTube&logoColor=white.svg"/></a>
+<a href="https://www.reddit.com/user/parikshitpagare"><img src="https://img.shields.io/badge/Reddit-DBDBDB?style=for-the-badge&logo=reddit&logoColor=white.svg"/></a>
